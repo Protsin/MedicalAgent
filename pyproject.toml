@@ -1,0 +1,15 @@
+[project]
+name = "clinic-agent"
+version = "0.1.0"
+description = "Safety-first clinic pre-consultation and triage assistant"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Protsin" }]
+dependencies = []
+
+[project.scripts]
+clinic-agent = "clinic_agent.server:run"
+
+[tool.unittest]
+patterns = ["test_*.py"]

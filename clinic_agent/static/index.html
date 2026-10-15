@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>clinic-agent · 医疗预问诊分诊助手</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="app" aria-live="polite">
+      <header class="app-header">
+        <div>
+          <div class="brand-row">
+            <span class="brand-mark" aria-hidden="true">+</span>
+            <div>
+              <h1>clinic-agent</h1>
+              <p>医疗预问诊与安全分诊助手</p>
+            </div>
+          </div>
+        </div>
+        <a class="emergency-link" href="tel:120">紧急：拨打 120</a>
+      </header>
+
+      <section id="emergencyBanner" class="emergency-banner hidden" role="alert">
+        <strong>疑似急症提示</strong>
+        <span>请立即拨打 120 或前往最近急诊。本页对话不能替代急救处理。</span>
+      </section>
+
+      <main class="layout">
+        <aside class="panel intake-panel">
+          <section class="intake card">
+            <h2>就诊人信息</h2>
+            <p class="muted">建议使用昵称；无需输入身份证号、家庭住址等敏感信息。</p>
+            <form id="sessionForm">
+              <label>
+                昵称
+                <input name="patient_alias" maxlength="80" autocomplete="nickname" placeholder="例如：小李" />
+              </label>
+              <div class="field-row">
+                <label>
+                  年龄
+                  <input name="age_years" type="number" min="0" max="120" inputmode="numeric" placeholder="岁" />
+                </label>
+                <label>
+                  性别
+                  <select name="sex">
+                    <option value="unknown">不提供</option>
+                    <option value="female">女</option>
+                    <option value="male">男</option>
+                    <option value="other">其他</option>
+                  </select>
+                </label>
+              </div>
+              <button class="secondary-button" type="submit">开始新问诊</button>
+            </form>
+          </section>
+
+          <section class="history card">
+            <div class="history-header">
+              <h2>历史问诊</h2>
+              <button id="refreshSessions" class="icon-button" type="button" title="刷新历史">↻</button>
+            </div>
+            <div id="sessionList" class="session-list" aria-label="历史问诊"></div>
+          </section>
+        </aside>
+
+        <section class="panel conversation-panel">
+          <div class="conversation-header">
+            <div>
+              <h2 id="sessionTitle">正在准备问诊</h2>
+              <div id="statusLine" class="muted">正在检查服务状态…</div>
+            </div>
+            <button id="copySummary" class="secondary-button compact" type="button">复制就诊摘要</button>
+          </div>
+
+          <div id="messages" class="messages" aria-live="polite">
+            <article class="empty-state">
+              <h3>开始前请确认</h3>
+              <ul>
+                <li>本系统只提供分诊和就医准备建议，<strong>不诊断、不开处方</strong>。</li>
+                <li>如出现胸痛、呼吸困难、意识不清、大出血、严重外伤或自杀念头，请立即拨打120。</li>
+                <li>请尽量描述症状部位、持续时间、严重程度和既往疾病。</li>
+              </ul>
+            </article>
+          </div>
+
+          <form id="messageForm" class="composer">
+            <label class="screen-reader-only" for="messageInput">描述症状</label>
+            <textarea id="messageInput" rows="3" maxlength="4000" placeholder="例如：从昨晚开始喉咙痛，今天有低热，吞咽时疼痛，持续约18小时。" required></textarea>
+            <button id="sendButton" class="primary-button" type="submit">发送</button>
+          </form>
+        </section>
+
+        <aside class="panel safety-panel">
+          <section class="card">
+            <h2>当前安全评估</h2>
+            <div id="urgencyCard" class="urgency-card info">
+              <span class="urgency-title">待补充信息</span>
+              <span class="muted">发送症状后显示安全级别。</span>
+            </div>
+            <div id="departmentList" class="department-list"></div>
+          </section>
+          <section class="card">
+            <h2>模型状态</h2>
+            <div id="healthInfo" class="health-info">检查中…</div>
+          </section>
+          <section class="card disclaimer">
+            <h2>使用边界</h2>
+            <p>本工具用于整理症状、识别需要立即就医的警示表现和推荐就诊科室。它不能替代医生面诊、急救、检验或处方。</p>
+          </section>
+        </aside>
+      </main>
+
+      <footer>
+        <span>仅作就医准备参考 · 如遇急症请直接呼叫急救</span>
+      </footer>
+    </div>
+    <script src="/app.js"></script>
+  </body>
+</html>
